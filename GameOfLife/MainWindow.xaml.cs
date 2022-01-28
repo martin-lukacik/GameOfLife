@@ -16,7 +16,7 @@ namespace GameOfLife
 
         Timer gameTimer = new Timer();
 
-        int targetFPS = 1;
+        int targetFPS = 60;
         long currentFPS = 0;
 
         Stopwatch fpsWatch = Stopwatch.StartNew();
@@ -27,7 +27,7 @@ namespace GameOfLife
         {
             InitializeComponent();
 
-            game.LoadFile(@"\Patterns\pattern05.txt");
+            game.LoadFile(@"pattern.txt");
             game.UpdateUI(canvas);
 
             InitFPSCounter();

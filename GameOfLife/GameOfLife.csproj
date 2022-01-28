@@ -111,7 +111,7 @@
     <Resource Include="Patterns\pattern04.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Patterns\pattern05.txt" />
+    <Resource Include="Patterns\pattern.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

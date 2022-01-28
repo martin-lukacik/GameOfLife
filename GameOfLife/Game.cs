@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
 
@@ -90,17 +91,20 @@ namespace GameOfLife
             }
         }
 
-        public void LoadFile(string path)
+        public void LoadFile(string file)
         {
-            string fullPath = Config.GetPath() + path;
-            TextReader tr = new StreamReader(fullPath);
+            TextReader tr = null;
+            try {
+                tr = new StreamReader(Directory.GetCurrentDirectory() + @"\" + file);
+            } catch (Exception) {
+                tr = new StreamReader(Config.GetPath() + @"\Patterns\" + file);
+            }
 
             List<string> fileCopy = new List<string>();
             string line = "";
+
             while ((line = tr.ReadLine()) != null)
-            {
                 fileCopy.Add(line);
-            }
 
             for (int y = 0; y < fileCopy.Count; ++y)
             {
