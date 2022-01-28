@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Diagnostics;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace GameOfLife
 {
@@ -16,10 +14,12 @@ namespace GameOfLife
     {
         Game game = new Game();
 
-        int targetFPS = 5;
+        Timer gameTimer = new Timer();
+
+        int targetFPS = 1;
         long currentFPS = 0;
 
-
+        Stopwatch fpsWatch = Stopwatch.StartNew();
         Label fpsCounter = new Label();
         Slider fpsSlider = new Slider();
 
@@ -27,12 +27,22 @@ namespace GameOfLife
         {
             InitializeComponent();
 
-            game.LoadFile(@"\Patterns\pattern02.txt");
-
+            game.LoadFile(@"\Patterns\pattern05.txt");
             game.UpdateUI(canvas);
 
-            fpsCounter.Foreground = Brushes.White;
+            InitFPSCounter();
+            UpdateFPSCounter();
+
+            StartTicking();
+        }
+
+        private void InitFPSCounter()
+        {
             canvas.Children.Add(fpsCounter);
+            canvas.Children.Add(fpsSlider);
+
+            fpsCounter.Foreground = Brushes.White;
+            fpsCounter.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
             fpsSlider.Value = targetFPS;
             fpsSlider.Minimum = 1;
@@ -41,41 +51,35 @@ namespace GameOfLife
             fpsSlider.TickFrequency = 1;
             fpsSlider.ValueChanged += FpsSlider_ValueChanged;
 
-            fpsCounter.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             Canvas.SetLeft(fpsSlider, fpsCounter.DesiredSize.Width * 7);
             Canvas.SetTop(fpsSlider, 5);
-            canvas.Children.Add(fpsSlider);
-
-            StartTicking();
-            UpdateFPSCounter();
         }
 
         private void UpdateFPSCounter()
         {
+            fpsWatch.Stop();
+            currentFPS = fpsWatch.ElapsedMilliseconds;
+            fpsWatch = Stopwatch.StartNew();
+
             fpsCounter.Content = "Set FPS\t" + targetFPS + "\nFPS\t" + Math.Ceiling(1000.0 / currentFPS);
         }
 
         private void FpsSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             targetFPS = (int) fpsSlider.Value;
-            timer.Interval = 1000 / targetFPS;
+            gameTimer.Interval = 1000 / targetFPS;
             UpdateFPSCounter();
         }
 
-        Timer timer = new Timer();
         private void StartTicking()
         {
-            timer.Elapsed += Tick;
-            timer.Interval = 1000 / targetFPS;
-            timer.Start();
+            gameTimer.Elapsed += Tick;
+            gameTimer.Interval = 1000 / targetFPS;
+            gameTimer.Start();
         }
 
-        System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
         private void Tick(object sender, ElapsedEventArgs e)
         {
-            watch.Stop();
-            currentFPS = watch.ElapsedMilliseconds;
-            watch = System.Diagnostics.Stopwatch.StartNew();
             try {
                 Dispatcher.Invoke(() => {
                     UpdateFPSCounter();
@@ -89,7 +93,7 @@ namespace GameOfLife
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double cellSize = Math.Floor(ActualWidth / game.Columns);
+            double cellSize = Math.Ceiling(ActualWidth / game.Columns);
 
             game.SetCellSize(cellSize, padding: 0.0);
         }

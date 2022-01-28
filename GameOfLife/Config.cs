@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
-using System.Windows.Media;
 
 namespace GameOfLife
 {
@@ -9,7 +7,7 @@ namespace GameOfLife
     {
         public static string GetPath()
         {
-            string path = System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+            string path = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
 
             path = Directory.GetParent(Directory.GetParent(path).FullName).FullName;
 

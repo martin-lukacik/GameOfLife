@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
-using Cells = System.Collections.Generic.List<GameOfLife.Cell>;
 
 namespace GameOfLife
 {
     public class Game
     {
-        private List<Cells> cells = new List<Cells>();
+        private List<List<Cell>> cells = new List<List<Cell>>();
 
         public int Rows
         {
@@ -75,7 +74,7 @@ namespace GameOfLife
         {
             for (int y = 0; y < cells.Count; ++y)
                 for (int x = 0; x < cells[0].Count; ++x)
-                    cells[y][x].SetSize(size, padding);
+                    cells[y][x].GetUIObject().SetSize(size, padding);
         }
 
         public void UpdateUI(Canvas canvas)
@@ -86,7 +85,7 @@ namespace GameOfLife
             {
                 for (int x = 0; x < cells[0].Count; ++x)
                 {
-                    canvas.Children.Add(cells[y][x].shape);
+                    canvas.Children.Add(cells[y][x].GetUIObject().GetShape());
                 }
             }
         }
@@ -105,7 +104,7 @@ namespace GameOfLife
 
             for (int y = 0; y < fileCopy.Count; ++y)
             {
-                cells.Add(new Cells());
+                cells.Add(new List<Cell>());
 
                 for (int x = 0; x < fileCopy[0].Length; ++x)
                 {

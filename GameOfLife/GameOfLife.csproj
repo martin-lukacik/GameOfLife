@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UICell.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -102,6 +103,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Patterns\pattern02.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Patterns\pattern03.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Patterns\pattern04.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Patterns\pattern05.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
